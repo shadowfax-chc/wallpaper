@@ -12,6 +12,14 @@ type UpdaterConfig struct {
 	Frequency  time.Duration
 }
 
+// ReloadConfig is used to reload the Updater.
+type ReloadConfig struct {
+	Mode      Mode
+	Location  string
+	Shuffle   bool
+	Frequency time.Duration
+}
+
 // Updater updates the background using images from the repository.
 type Updater struct {
 	Background *Background
@@ -60,7 +68,13 @@ func (u *Updater) Run(ctx context.Context) error {
 }
 
 // Reload refreshes the repository and sets a new wallpaper
-func (u *Updater) Reload() {
+func (u *Updater) Reload(c *ReloadConfig) {
+	if c != nil {
+		u.Background.Mode = c.Mode
+		u.Repository.SetLocation(c.Location)
+		u.Repository.SetShuffle(c.Shuffle)
+		u.Frequency = c.Frequency
+	}
 	u.Repository.Reload()
 	u.Next()
 }

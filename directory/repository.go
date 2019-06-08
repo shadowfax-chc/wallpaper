@@ -12,17 +12,15 @@ import (
 
 // Config is used to configure a repository.
 type Config struct {
-	Root      string
-	Recursive bool
-	Shuffle   bool
+	Root    string
+	Shuffle bool
 }
 
 // Repository of wallpapers in a file system's directory/folder.
 type Repository struct {
 	Root string // The path to the directory
 
-	recursive bool // If the repository should recursively look for images.
-	shuffle   bool // If the repository should randomize the order of the images.
+	shuffle bool // If the repository should randomize the order of the images.
 
 	images    []wallpaper.Image
 	lastIndex int
@@ -40,19 +38,13 @@ func NewRepository(c *Config) (wallpaper.Repository, error) {
 		c.Root = realpath
 	}
 	return &Repository{
-		Root:      c.Root,
-		recursive: c.Recursive,
-		shuffle:   c.Shuffle,
+		Root:    c.Root,
+		shuffle: c.Shuffle,
 	}, nil
 }
 
 func (r *Repository) scandir() filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
-		if info.IsDir() && !r.recursive {
-			log.Printf("[DEBUG] skipping directory: %s", path)
-			return filepath.SkipDir
-		}
-
 		log.Printf("[DEBUG] checking if file %s is an image", path)
 		if wallpaper.IsImage(path) {
 			r.images = append(r.images, wallpaper.Image(path))
@@ -105,4 +97,14 @@ func (r *Repository) Next() wallpaper.Image {
 		r.lastIndex = 0
 	}
 	return r.images[r.lastIndex]
+}
+
+// SetLocation updates the root point of the repository
+func (r *Repository) SetLocation(root string) {
+	r.Root = root
+}
+
+// SetShuffle sets the repository to shuffle
+func (r *Repository) SetShuffle(shuffle bool) {
+	r.shuffle = shuffle
 }

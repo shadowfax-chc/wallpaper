@@ -2,12 +2,14 @@ package logging
 
 import (
 	"github.com/hashicorp/logutils"
-	"github.com/urfave/cli"
+	"gopkg.in/urfave/cli.v1"
+	"gopkg.in/urfave/cli.v1/altsrc"
 
 	"github.com/shadowfax-chc/wallpaper/logging"
 )
 
-func enableLogger(ctx *cli.Context) error {
+// ReloadLogger setups up the logger base on the cli args.
+func ReloadLogger(ctx *cli.Context) error {
 	return logging.Setup(&logging.Config{
 		Handler: ctx.GlobalString("log-handler"),
 		Level:   ctx.GlobalString("log-level"),
@@ -18,7 +20,7 @@ func enableLogger(ctx *cli.Context) error {
 // HandleLogger is a wrapper action for setting up logging.
 func HandleLogger(af cli.ActionFunc) cli.ActionFunc {
 	return func(ctx *cli.Context) error {
-		err := enableLogger(ctx)
+		err := ReloadLogger(ctx)
 		if err != nil {
 			return err
 		}
@@ -29,17 +31,17 @@ func HandleLogger(af cli.ActionFunc) cli.ActionFunc {
 // Flags get the command line flags for logging.
 func Flags() []cli.Flag {
 	return []cli.Flag{
-		cli.StringFlag{
+		altsrc.NewStringFlag(cli.StringFlag{
 			Name:   "log-handler",
 			Usage:  "Set where the logs will go",
 			EnvVar: "WP_LOG_HANDLER",
 			Value:  "stdout",
-		},
-		cli.StringFlag{
+		}),
+		altsrc.NewStringFlag(cli.StringFlag{
 			Name:   "log-level",
 			Usage:  "Set the logging verbosity level.",
 			EnvVar: "WP_LOG_LEVEL",
 			Value:  "WARN",
-		},
+		}),
 	}
 }

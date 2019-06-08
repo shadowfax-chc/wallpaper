@@ -10,19 +10,25 @@ import (
 	"os/signal"
 	"path"
 	"syscall"
-	"time"
 
+	"gopkg.in/urfave/cli.v1"
+	"gopkg.in/urfave/cli.v1/altsrc"
+
+	"github.com/shadowfax-chc/wallpaper/command/internal/logging"
 	"github.com/shadowfax-chc/wallpaper/directory"
 	"github.com/shadowfax-chc/wallpaper/wallpaper"
-	"github.com/urfave/cli"
 )
+
+// Before is used as a cli.BeforeFunc that is called before Action.
+func Before(flags []cli.Flag) cli.BeforeFunc {
+	return altsrc.InitInputSourceWithContext(flags, altsrc.NewYamlSourceFromFlagFunc("config"))
+}
 
 // Action is the action function for the command.
 func Action(c *cli.Context) error {
 	config := &directory.Config{
-		Root:      c.String("directory"),
-		Recursive: c.Bool("recursive"),
-		Shuffle:   c.Bool("shuffle"),
+		Root:    c.String("directory"),
+		Shuffle: c.Bool("shuffle"),
 	}
 	r, err := directory.NewRepository(config)
 	if err != nil {
@@ -57,7 +63,15 @@ func Action(c *cli.Context) error {
 			case syscall.SIGUSR1:
 				updater.Next()
 			case syscall.SIGHUP:
-				updater.Reload()
+				Before(c.App.Flags)(c)
+				logging.ReloadLogger(c)
+				rc := &wallpaper.ReloadConfig{
+					Mode:      wallpaper.Mode(c.String("mode")),
+					Location:  c.String("directory"),
+					Shuffle:   c.Bool("shuffle"),
+					Frequency: c.Duration("update-frequency"),
+				}
+				updater.Reload(rc)
 			case syscall.SIGTERM:
 				fallthrough
 			case syscall.SIGINT:
@@ -74,32 +88,31 @@ func Action(c *cli.Context) error {
 func Flags() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:   "directory,d",
+			Name:  "config",
+			Value: path.Join(os.Getenv("HOME"), ".wp.yaml"),
+		},
+		altsrc.NewStringFlag(cli.StringFlag{
+			Name:   "directory",
 			Usage:  "The root directory that contains background images",
 			EnvVar: "WP_DIRECTORY,WALLPAPERS",
 			Value:  path.Join(os.Getenv("HOME"), ".wallpaper"),
-		},
-		cli.BoolFlag{
-			Name:   "recursive,r",
-			Usage:  "Scan recursively down the directory for images",
-			EnvVar: "WP_RECURSIVE",
-		},
-		cli.BoolFlag{
-			Name:   "shuffle,s",
+		}),
+		altsrc.NewBoolFlag(cli.BoolFlag{
+			Name:   "shuffle",
 			Usage:  "Randomize the images",
 			EnvVar: "WP_SHUFFLE",
-		},
-		cli.StringFlag{
+		}),
+		altsrc.NewStringFlag(cli.StringFlag{
 			Name:   "mode",
 			Usage:  "The background mode to apply to the image so that it fits the screen",
 			EnvVar: "WP_MODE",
 			Value:  "fill",
-		},
-		cli.DurationFlag{
-			Name:   "update-frequency,u",
+		}),
+		altsrc.NewStringFlag(cli.StringFlag{
+			Name:   "update-frequency",
 			Usage:  "How often to update the background image",
 			EnvVar: "WP_UPDATE_FREQ",
-			Value:  5 * time.Minute,
-		},
+			Value:  "5s",
+		}),
 	}
 }

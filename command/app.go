@@ -1,7 +1,7 @@
 package command
 
 import (
-	"github.com/urfave/cli"
+	"gopkg.in/urfave/cli.v1"
 
 	"github.com/shadowfax-chc/wallpaper/command/internal/logging"
 	"github.com/shadowfax-chc/wallpaper/command/internal/run"
@@ -13,7 +13,12 @@ func App() *cli.App {
 	app := cli.NewApp()
 	app.Name = "wp"
 	app.Version = version.Description()
-	app.Flags = append(run.Flags(), logging.Flags()...)
+
+	flags := append(run.Flags(), logging.Flags()...)
+
+	app.Before = run.Before(flags)
+	app.Flags = flags
 	app.Action = logging.HandleLogger(run.Action)
+
 	return app
 }

@@ -8,4 +8,8 @@ type Repository interface {
 	Reload() error
 	// Next returns the next Wallpaper to be used.
 	Next() Image
+	// SetShuffle sets the Repository to randomize images or not.
+	SetShuffle(bool)
+	// SetLocation sets a new location string for the Repository source.
+	SetLocation(string)
 }
