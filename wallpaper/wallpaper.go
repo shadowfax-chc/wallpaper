@@ -19,11 +19,14 @@ func (i Image) String() string {
 type Mode string
 
 // Supported modes for image scaling.
-// See `man feh` for more details.
+// See the BACKGROUND SETTINGS section of the feh man page:
+//   https://man.finalrewind.org/1/feh/ or `man feh`
 const (
 	Center Mode = "center"
 	Fill   Mode = "fill"
 	Max    Mode = "max"
+	Scale  Mode = "scale"
+	Tile   Mode = "tile"
 )
 
 // Background is used to manage the Image that is displayed as the wallpaper.

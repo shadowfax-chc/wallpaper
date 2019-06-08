@@ -112,7 +112,7 @@ func Flags() []cli.Flag {
 			Name:   "update-frequency",
 			Usage:  "How often to update the background image",
 			EnvVar: "WP_UPDATE_FREQ",
-			Value:  "5s",
+			Value:  "5m",
 		}),
 	}
 }
