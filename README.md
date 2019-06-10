@@ -43,3 +43,13 @@ A running instance of `wp` will response to the following signals:
 | ------- | -------------------------------------------------------------- |
 | SIGHUP  | Reload config file, re-scan the directory, and set a new image |
 | SIGUSR1 | Switch to the next image, and reset the timer                  |
+
+### Subcommands
+
+Rather then sending signals directly, there are subcommands that can be used
+subcommands can be used:
+
+| Command     | Action                                                         |
+| ----------- | -------------------------------------------------------------- |
+| `wp reload` | Reload config file, re-scan the directory, and set a new image |
+| `wp next`   | Switch to the next image, and reset the timer                  |

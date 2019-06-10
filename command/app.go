@@ -4,6 +4,9 @@ import (
 	"gopkg.in/urfave/cli.v1"
 
 	"github.com/shadowfax-chc/wallpaper/command/internal/logging"
+	"github.com/shadowfax-chc/wallpaper/command/internal/next"
+	"github.com/shadowfax-chc/wallpaper/command/internal/pid"
+	"github.com/shadowfax-chc/wallpaper/command/internal/reload"
 	"github.com/shadowfax-chc/wallpaper/command/internal/run"
 	"github.com/shadowfax-chc/wallpaper/version"
 )
@@ -15,10 +18,25 @@ func App() *cli.App {
 	app.Version = version.Description()
 
 	flags := append(run.Flags(), logging.Flags()...)
+	flags = append(flags, pid.Flags()...)
 
 	app.Before = run.Before(flags)
 	app.Flags = flags
-	app.Action = logging.HandleLogger(run.Action)
+	app.Action = pid.HandlePIDFile(logging.HandleLogger(run.Action))
 
+	app.Commands = []cli.Command{
+		{
+			Name:   "next",
+			Usage:  "send singal to use the next image",
+			Flags:  append(logging.Flags(), pid.Flags()...),
+			Action: logging.HandleLogger(next.Action),
+		},
+		{
+			Name:   "reload",
+			Usage:  "send singal to reload the config",
+			Flags:  append(logging.Flags(), pid.Flags()...),
+			Action: logging.HandleLogger(reload.Action),
+		},
+	}
 	return app
 }
