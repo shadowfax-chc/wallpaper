@@ -101,6 +101,15 @@ func (r *Repository) Next() wallpaper.Image {
 
 // SetLocation updates the root point of the repository
 func (r *Repository) SetLocation(root string) {
+	info, err := os.Lstat(root)
+	if err != nil {
+		return
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		realpath, _ := filepath.EvalSymlinks(root)
+		log.Printf("[DEBUG] root %s is symlink to %s", root, realpath)
+		root = realpath
+	}
 	r.Root = root
 }
 
