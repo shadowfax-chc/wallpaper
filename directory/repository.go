@@ -55,6 +55,7 @@ func (r *Repository) scandir() filepath.WalkFunc {
 
 func (r *Repository) scan(dir string) error {
 	log.Printf("[DEBUG] scanning directory: %s", dir)
+	r.images = make([]wallpaper.Image, 0)
 	return filepath.Walk(dir, r.scandir())
 }
 
