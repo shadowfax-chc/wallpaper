@@ -3,12 +3,12 @@ package command
 import (
 	"gopkg.in/urfave/cli.v1"
 
-	"github.com/shadowfax-chc/wallpaper/command/internal/logging"
-	"github.com/shadowfax-chc/wallpaper/command/internal/next"
-	"github.com/shadowfax-chc/wallpaper/command/internal/pid"
-	"github.com/shadowfax-chc/wallpaper/command/internal/reload"
-	"github.com/shadowfax-chc/wallpaper/command/internal/run"
-	"github.com/shadowfax-chc/wallpaper/version"
+	"github.com/tmessi/wallpaper/command/internal/logging"
+	"github.com/tmessi/wallpaper/command/internal/next"
+	"github.com/tmessi/wallpaper/command/internal/pid"
+	"github.com/tmessi/wallpaper/command/internal/reload"
+	"github.com/tmessi/wallpaper/command/internal/run"
+	"github.com/tmessi/wallpaper/version"
 )
 
 // App returns the cli App with its subcomands and flags defined.

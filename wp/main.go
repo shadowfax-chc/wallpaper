@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/shadowfax-chc/wallpaper/command"
+	"github.com/tmessi/wallpaper/command"
 )
 
 func main() {

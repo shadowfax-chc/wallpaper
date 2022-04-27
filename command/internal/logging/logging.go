@@ -5,7 +5,7 @@ import (
 	"gopkg.in/urfave/cli.v1"
 	"gopkg.in/urfave/cli.v1/altsrc"
 
-	"github.com/shadowfax-chc/wallpaper/logging"
+	"github.com/tmessi/wallpaper/logging"
 )
 
 // ReloadLogger setups up the logger base on the cli args.

@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/shadowfax-chc/wallpaper/wallpaper"
+	"github.com/tmessi/wallpaper/wallpaper"
 )
 
 // Config is used to configure a repository.

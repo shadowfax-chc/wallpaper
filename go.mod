@@ -1,4 +1,4 @@
-module github.com/shadowfax-chc/wallpaper
+module github.com/tmessi/wallpaper
 
 go 1.12
 

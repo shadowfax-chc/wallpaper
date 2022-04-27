@@ -14,9 +14,9 @@ import (
 	"gopkg.in/urfave/cli.v1"
 	"gopkg.in/urfave/cli.v1/altsrc"
 
-	"github.com/shadowfax-chc/wallpaper/command/internal/logging"
-	"github.com/shadowfax-chc/wallpaper/directory"
-	"github.com/shadowfax-chc/wallpaper/wallpaper"
+	"github.com/tmessi/wallpaper/command/internal/logging"
+	"github.com/tmessi/wallpaper/directory"
+	"github.com/tmessi/wallpaper/wallpaper"
 )
 
 // Before is used as a cli.BeforeFunc that is called before Action.

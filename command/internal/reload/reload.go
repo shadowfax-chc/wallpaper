@@ -5,7 +5,7 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/shadowfax-chc/wallpaper/command/internal/pid"
+	"github.com/tmessi/wallpaper/command/internal/pid"
 	"gopkg.in/urfave/cli.v1"
 )
 
